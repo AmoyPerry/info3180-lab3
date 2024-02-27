@@ -1,7 +1,8 @@
 from app import app
 from flask import render_template, request, redirect, url_for, flash
-
-
+from .forms import ContactForm
+from flask_mail import Message
+from app import mail 
 ###
 # Routing for your application.
 ###
@@ -15,7 +16,7 @@ def home():
 @app.route('/about/')
 def about():
     """Render the website's about page."""
-    return render_template('about.html', name="Mary Jane")
+    return render_template('about.html', name="Amoy Perry")
 
 
 ###
@@ -38,6 +39,31 @@ def send_text_file(file_name):
     """Send your static text file."""
     file_dot_text = file_name + '.txt'
     return app.send_static_file(file_dot_text)
+
+
+@app.route('/contact', methods=['GET', 'POST'])
+# msg = Message("Your Subject",
+#  sender=("Senders Name", "from@example.com"),
+#  recipients=["to@example.com"])
+# msg.body = 'This is the body of the message'
+# mail.send(msg)
+
+def contact():
+    forms = ContactForm()
+    if forms.validate_on_submit():
+            name = request.form['name']
+            email = request.form['email']
+            message = request.form['message']
+            subject = request.form['subject']
+            
+            msg = Message(subject, sender=(name, email),recipients=["perrykendraamoy@gmail.com"])
+            msg.body = message
+            mail.send(msg)
+
+            flash('You have successfully filled out the form', 'success')
+            return redirect(url_for('home'))
+    return render_template("contact.html", form = forms)
+    
 
 
 @app.after_request

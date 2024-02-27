@@ -1,0 +1,18 @@
+.RequiredText{
+    color: red;
+}
+
+.text{
+    font-size: 10px;
+}
+
+.head{
+    border-bottom: 1px solid #888;
+  }
+  
+button{
+    background-color: #1e81b0;
+    color: white;
+    border: none;
+    border-radius: 10%;
+}
